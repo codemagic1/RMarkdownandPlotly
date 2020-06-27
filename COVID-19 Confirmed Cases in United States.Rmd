@@ -1,0 +1,36 @@
+---
+title: "COVID-19 Confirmed Cases in United States"
+author: "RK"
+date: "6/25/2020"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Time Series Plot of COVID-19 Cases in the United States
+
+```{r libraries, include=FALSE}
+library(plotly)
+library(lubridate)
+```
+
+```{r dataformat, include=FALSE, warning=FALSE}
+data <- read.csv("time_series_covid19_confirmed_global.csv")
+date <- seq(as.Date("2020-01-22"), as.Date("2020-06-24"), by = "days")
+format(date, "%m/%d/%y")
+names(data)[5:159] <- as.character(date)
+sumData <- aggregate(.~Country.Region, data, sum)
+USData <- sumData[180, 5:159]
+USData <- as.vector(t(USData))
+USData <- as.data.frame(cbind(date, USData))
+```
+
+```{r timeseriesplot, echo=FALSE, warning=FALSE, message=FALSE}
+plot_ly(USData, x = date, y = USData, mode = "markers")
+```
+
+## Keep Social Distancing!
+
+Data Retrieved from https://github.com/CSSEGISandData/COVID-19/blob/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv
